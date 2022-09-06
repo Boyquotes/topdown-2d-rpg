@@ -1,10 +1,14 @@
 extends KinematicBody2D
 
+onready var animation: AnimationPlayer = get_node("Animation")
+onready var sprite: Sprite = get_node("Sprite")
 var velocity: Vector2
 export(int) var speed
 
 func _physics_process(_delta):
 	move()
+	animate()
+	verify_direction()
 	
 
 func move():
@@ -17,3 +21,15 @@ func move():
 	velocity = direction_vector * speed
 	
 	velocity = move_and_slide(velocity)
+	
+func animate():
+	if velocity != Vector2.ZERO:
+		animation.play("run")
+	else:
+		animation.play("idle")
+	
+func verify_direction():
+	if velocity.x > 0:
+		sprite.flip_h = false
+	elif velocity.x < 0:
+		sprite.flip_h = true
